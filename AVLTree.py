@@ -272,13 +272,12 @@ A class implementing an AVL tree.
 """
 
 class AVLTree(object):
-	EXT = AVLNode(None,None)
 
 	"""
 	Constructor, you are allowed to add more fields.
 	"""
 	def __init__(self):
-		self.root = self.EXT
+		self.root = None
 		self.tree_size = 0
 		self._max_node = None
 
@@ -341,8 +340,8 @@ class AVLTree(object):
 		# Create new node using key and val
 		new_node = AVLNode(key,val)
 		# Set its left and right child pointers to virtual nodes
-		new_node.set_left(self.EXT)
-		new_node.set_right(self.EXT)
+		new_node.set_left(AVLNode(None,None))
+		new_node.set_right(AVLNode(None,None))
 		new_node.get_right().set_parent(new_node)
 		new_node.get_left().set_parent(new_node)
 
@@ -541,7 +540,7 @@ class AVLTree(object):
 		edge_count = 1
 
 		# Tree is empty
-		if curr_node == self.EXT:
+		if curr_node == None:
 			self.root = node
 
 		# Tree is not empty
@@ -750,15 +749,15 @@ class AVLTree(object):
 		
 		self._max_node = tree2.max_node()
 
-		if small_root.get_key() == None and big_root.get_key() == None:
+		if small_root == None and big_root == None:
 			self.insert(node.get_key(), node.get_value())
 			return
-		elif small_root.get_key() == None:
+		elif small_root == None:
 			h = tree2.get_root().get_height()
 			tree2.insert(node.get_key(), node.get_value())
 			self.root = tree2.get_root()
 			return
-		elif big_root.get_key() == None:
+		elif big_root == None:
 			h = self.get_root().get_height()
 			self.insert(node.get_key(), node.get_value())
 			return

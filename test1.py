@@ -77,6 +77,8 @@ def display(T):
 
 
 def check_height(node):
+    if node is None:
+        return True
     if not node.is_real_node():
         return True
     left = node.height - node.left.height
@@ -88,6 +90,8 @@ def check_height(node):
 
 def check_bst(self):
     def _check_bst(node):
+        if node is None:
+            return True
         if node.key == None:
             return True
         if node.height == 0:
@@ -192,17 +196,17 @@ def test_suite():
             assert check_bst(T_big)
             assert check_bst(T_big)
 
-    # # Test 3 - test tree split
-    # for i in range(TEST_NUM):
-    #     L1 = random.sample(nums, TREE_SIZE)
-    #     T = generate_tree(L1)
-    #     split_key = random.choice(L1)
-    #     v = T.search(split_key)[0]
-    #     t1, t2 = T.split(v)
-    #     assert check_bst(t1)
-    #     assert check_bst(t2)
-    #     assert check_height(t1.root)
-    #     assert check_height(t2.root)
+    # Test 3 - test tree split
+    for i in range(TEST_NUM):
+        L1 = random.sample(nums, TREE_SIZE)
+        T = generate_tree(L1)
+        split_key = random.choice(L1)
+        v = T.search(split_key)[0]
+        t1, t2 = T.split(v)
+        assert check_bst(t1)
+        assert check_bst(t2)
+        assert check_height(t1.root)
+        assert check_height(t2.root)
 
 
 def temp():
@@ -211,8 +215,8 @@ def temp():
     t=AVLTree()
     for item in KEYES:
         t.insert(key=item,val="d")
-    split_node=t.search(SPLIT_KEY)[0]
     display(t)
+    split_node=t.search(SPLIT_KEY)[0]
     t1,t2=t.split(split_node)
     display(t1)
     display(t2)
@@ -220,6 +224,6 @@ def temp():
 
 
 if __name__ == "__main__":
-    # test_suite()
-    temp()
+    test_suite()
+    # temp()
     

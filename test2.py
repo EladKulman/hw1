@@ -89,18 +89,6 @@ def test():
         for j in range(NUM_OF_TESTS):
             split_test(TREE_SIZE = i)
 
-# def temp():
-#     KEYES = [11, 47, 28, 3, 108, 101, 158, 59, 157, 94, 78, 80, 154, 132, 82, 46]
-#     SPLIT_KEY = 46
-#     t=AVLTree()
-#     for item in KEYES:
-#         t.insert(key=item,val="d")
-#     split_node=t.search(SPLIT_KEY)[0]
-#     display(t)
-#     t1,t2=t.split(split_node)
-#     display(t1)
-#     display(t2)
-#     print("temp passed")
 
 
 if __name__ == "__main__":
