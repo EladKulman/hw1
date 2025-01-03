@@ -1,0 +1,3 @@
+1. search will also return number of edges + 1
+2. insert will also return number of edges and number of promotes
+3. rebalance will calc only promotes (not rotations)
