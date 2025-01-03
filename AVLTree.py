@@ -377,6 +377,7 @@ class AVLTree(object):
 	and h is the number of PROMOTE cases during the AVL rebalancing
 	"""
 	def finger_insert(self, key, val):
+		# TODO: Implement 
 		return None, -1, -1
 
 
@@ -386,7 +387,26 @@ class AVLTree(object):
 	@pre: node is a real pointer to a node in self
 	"""
 	def delete(self, node):
-		return	
+		# Save parent of physically deleted node, for rebalancing
+		suc = self.successor(node)
+		if node.get_right().is_real_node() and node.get_left().is_real_node():
+			y = suc.get_parent()
+			# In case the successor is the node's right child
+			if suc == node.get_right():
+				y = suc
+		else:
+			y = node.get_parent()
+
+		# Regular deletion of node from Self (like in BST)
+		self.bst_delete(node)
+
+		# Perform rebalance with option 2 - deletion
+
+		# update max
+		self.rebalance(2, y)
+
+		if self._max_node == node:
+			self._max_node = self.root.get_max_child()
 
 	
 	"""joins self with item and another AVLTree
@@ -487,7 +507,8 @@ class AVLTree(object):
 	@returns: a sorted list according to key of touples (key, value) representing the data structure
 	"""
 	def avl_to_array(self):
-		return None
+		pass
+		# TODO: Implement 
 
 
 	"""returns the node with the maximal key in the dictionary
@@ -843,6 +864,104 @@ class AVLTree(object):
 			else:
 				case_num = 4
 			self.rebalance(case_num, c)
+
+	"""regular deletion from dictionary (like in BST, without rotations)
+	Complexity: O(logn)
+	@type node: AVLNode
+	@param a: Node to delete from tree
+	"""
+	def bst_delete(self, node):
+		right_child = node.get_right() # Node's right child
+		left_child = node.get_left() # Node's left child
+
+		has_right_child = right_child.is_real_node() # True if node has a right child
+		has_left_child = left_child.is_real_node() # True if node has a left child
+
+		parent = node.get_parent() # Node's parent
+
+		# Case 1: Node is a leaf
+		if not has_left_child and not has_right_child:
+			# If node is the root and the only node in tree
+			if parent == None:
+				self.root = None
+			# If node is a right child
+			elif node.is_right_child():
+				# Set parent's right child pointer to virtual node
+				parent.set_right(AVLNode(None, None))
+				parent.get_right().set_parent(parent) 
+			else:
+				# Set parent's left child pointer to virtual node
+				parent.set_left(AVLNode(None, None))
+				parent.get_left().set_parent(parent) 
+		
+		# Case 2: Node has two children
+		elif has_right_child and has_left_child:
+			# Find node successor
+			suc = self.successor(node)
+			# Remove successor from tree
+			if suc.is_right_child():
+				suc.get_parent().set_right(suc.get_right())
+			else:
+				suc.get_parent().set_left(suc.get_right())
+			suc.get_right().set_parent(suc.get_parent())
+			# Replace node with its successor
+			node.replace(suc)
+			# If node was root, set tree root as its successor
+			if self.root == node:
+				self.root = suc
+
+		# Case 3 (and last): Node has one child
+		else:
+			if has_right_child:
+				child = right_child # Child is a right child
+			else:
+				child = left_child # Child is a left child
+			
+			# If node is root
+			if parent == None:
+				self.root = child
+			# If node is a right child
+			elif node.is_right_child():
+				# Set parent's right child pointer to node's child
+				parent.set_right(child)
+			else:
+				# Set parent's left child pointer to node's child
+				parent.set_left(child)
+			
+			# Set child's parent pointer to real parent
+			child.set_parent(parent)
+		
+		# Subtract 1 from tree's size
+		self.change_size(-1)
+
+
+	"""gets node's successor in dictionary 
+	Complexity: O(logn)
+	@type node: AVLNode
+	@param a: Node to find successor to
+	@rtype: AVLNode or None
+	@returns: Successor of input node, or None if input node is the maximum key in the dictionary
+	"""
+	def successor(self, node):
+		curr = node
+
+		# If node has right child, go right to find successor
+		if curr.get_right().is_real_node():
+			curr = curr.get_right()
+			# Find minimum at right side to find successor
+			while curr.get_left().is_real_node():
+				curr = curr.get_left()
+			return curr
+		
+		# Node does not have right child
+		parent = curr.get_parent()
+		# Go up until the node is not the right child
+		while parent != None and parent.is_real_node() and curr.is_right_child():
+			curr = parent
+			parent = curr.get_parent()
+		
+		# Anyway, return parent. If node has the maximum key, None will be returned
+		return parent
 
 			
 

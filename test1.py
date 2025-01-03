@@ -208,22 +208,44 @@ def test_suite():
         assert check_height(t1.root)
         assert check_height(t2.root)
 
+    
+    # Test 4 - test delete
+    for i in range(TEST_NUM):
+        L3 = random.sample(nums, TREE_SIZE)
+        T = generate_tree(L3)
+        j = random.randint(0, TREE_SIZE - 1)
+        key = L3[j]
+        v = T.search(key)[0]
+        T.delete(v)
+        assert check_height(T.root)
+        assert T.size() == TREE_SIZE - 1
+        assert check_bst(T)
+
+        T = generate_tree(L3)
+        key = T.root.get_key()
+        v = T.search(key)[0]
+        T.delete(v)
+        assert check_height(T.root)
+        assert T.size() == TREE_SIZE - 1
+        assert check_bst(T)
+
+
+
 
 def temp():
-    KEYES = [15, 38, 42, 21, 47]
-    SPLIT_KEY = 15
+    KEYES = [1657, 31751, 1045, 13455, 22699, 9083]
     t=AVLTree()
     for item in KEYES:
         t.insert(key=item,val="d")
     display(t)
-    split_node=t.search(SPLIT_KEY)[0]
-    t1,t2=t.split(split_node)
-    display(t1)
-    display(t2)
+    key = 31751
+    v = t.search(key)[0]
+    t.delete(v)
+    display(t)
+    print(t.size())
     print("temp passed")
 
 
 if __name__ == "__main__":
     test_suite()
-    # temp()
     
